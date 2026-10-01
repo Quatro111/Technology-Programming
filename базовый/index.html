@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Счётчик</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            text-align: center;
+            padding: 50px;
+        }
+
+        .counter {
+            max-width: 400px;
+            margin: auto;
+            padding: 30px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 0 10px #ccc;
+        }
+
+        #value {
+            font-size: 60px;
+            margin: 20px;
+            color: #333;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: #3498db;
+            color: white;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #217dbb;
+        }
+
+        .negative {
+            color: red !important;
+        }
+
+        .positive {
+            color: green !important;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="counter">
+    <h1>Счётчик</h1>
+
+    <div id="value">0</div>
+
+    <button id="minus">−</button>
+    <button id="reset">Сброс</button>
+    <button id="plus">+</button>
+
+    <h3>Быстро установить:</h3>
+
+    <div id="presetButtons"></div>
+
+    <p id="message">Текущее значение: 0</p>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
