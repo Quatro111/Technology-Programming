@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список покупок</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #eef2f3;
+            padding: 40px;
+        }
+
+        .shopping-list {
+            max-width: 600px;
+            margin: auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 10px #ccc;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        input {
+            width: 60%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+        }
+
+        button {
+            padding: 12px 18px;
+            margin: 5px;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+            color: white;
+            background-color: #27ae60;
+        }
+
+        #clearButton {
+            background-color: #e74c3c;
+        }
+
+        #search {
+            width: 94%;
+            margin-top: 15px;
+        }
+
+        li {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f1f1f1;
+            border-radius: 5px;
+        }
+
+        .empty {
+            color: #888;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="shopping-list">
+
+    <h1>🛒 Список покупок</h1>
+
+    <input id="productInput" type="text" placeholder="Введите товар">
+    <button id="addButton">Добавить</button>
+
+    <input id="search" type="text" placeholder="Поиск товара">
+
+    <ol id="productList"></ol>
+
+    <button id="clearButton">Очистить список</button>
+
+    <p id="count">Товаров: 0</p>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
