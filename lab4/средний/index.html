@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Заказ товара</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>Заказ товара</h1>
+
+    <form id="orderForm">
+
+        <label for="product">Товар:</label>
+        <select id="product">
+            <option value="">Выберите товар</option>
+            <option value="Ноутбук">Ноутбук</option>
+            <option value="Клавиатура">Клавиатура</option>
+            <option value="Мышь">Мышь</option>
+            <option value="Наушники">Наушники</option>
+        </select>
+
+        <label for="quantity">Количество:</label>
+        <input type="number" id="quantity" min="1" placeholder="Введите количество">
+
+        <label>Способ доставки:</label>
+
+        <label class="radio">
+            <input type="radio" name="delivery" value="Курьер">
+            Курьер
+        </label>
+
+        <label class="radio">
+            <input type="radio" name="delivery" value="Самовывоз">
+            Самовывоз
+        </label>
+
+        <label>Дополнительные услуги:</label>
+
+        <label class="checkbox">
+            <input type="checkbox" value="Подарочная упаковка">
+            Подарочная упаковка
+        </label>
+
+        <label class="checkbox">
+            <input type="checkbox" value="Расширенная гарантия">
+            Расширенная гарантия
+        </label>
+
+        <button type="submit">Оформить заказ</button>
+    </form>
+
+    <p id="message"></p>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
