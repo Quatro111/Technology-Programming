@@ -1,0 +1,32 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #eef2ff;
+    padding: 50px;}
+
+.container {
+    max-width: 600px;
+    margin: auto;
+    background: white;
+    padding: 30px;
+    border-radius: 15px;}
+
+h1 {
+    text-align: center;}
+
+.question {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    background: #4f46e5;
+    color: white;
+    font-size: 17px;
+    text-align: left;
+    cursor: pointer;}
+
+.answer {
+    display: none;
+    padding: 15px;
+    background: #f3f4f6;}
+
+.answer.active {
+    display: block;}
