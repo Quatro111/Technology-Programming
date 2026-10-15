@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Визитка студента-lab</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="app.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Визитка студента</h1>
+            <p>Моя личная страница</p>
+        </header>
+
+        <nav aria-label="Основная навигация">
+            <button data-page="about" class="active">О себе</button>
+            <button data-page="skills">Навыки</button>
+            <button data-page="contacts">Контакты</button>
+        </nav>
+
+        <main id="content" aria-live="polite"></main>
+
+        <footer>Лабораторная работа № 7</footer>
+    </div>
+</body>
+</html>
