@@ -1,235 +1,155 @@
-const form = document.getElementById("sensorForm");
-const message = document.getElementById("message");
-const historyBody = document.getElementById("history");
-const alertsList = document.getElementById("alerts");
-
 const tempInput = document.getElementById("tempInput");
 const humidityInput = document.getElementById("humidityInput");
 const lightInput = document.getElementById("lightInput");
 
-let historyData = [];
-let autoTimer = null;
+const temperature = document.getElementById("temperature");
+const humidity = document.getElementById("humidity");
+const light = document.getElementById("light");
+const alerts = document.getElementById("alerts");
+const history = document.getElementById("history");
+const status = document.getElementById("status");
+
+let timer = null;
 
 function updateClock() {
     document.getElementById("clock").textContent =
-        "Текущее время: " + new Date().toLocaleString("ru-RU");
+        new Date().toLocaleTimeString("ru-RU");
 }
 
-function getProblems(data) {
-    const problems = [];
+setInterval(updateClock, 1000);
+updateClock();
 
-    if (data.temp < 18 || data.temp > 27) {
-        problems.push("Температура вне нормы");
+function checkValues(t, h, l) {
+    const messages = [];
+
+    if (t < 18 || t > 27) {
+        messages.push("Температура вне нормы!");
     }
 
-    if (data.humidity < 30 || data.humidity > 60) {
-        problems.push("Влажность вне нормы");
+    if (h < 30 || h > 60) {
+        messages.push("Влажность вне нормы!");
     }
 
-    if (data.light < 300 || data.light > 750) {
-        problems.push("Освещённость вне нормы");
+    if (l < 300 || l > 750) {
+        messages.push("Освещённость вне нормы!");
     }
 
-    return problems;
-}
-
-function validateData(data) {
-    if (
-        tempInput.value.trim() === "" ||
-        humidityInput.value.trim() === "" ||
-        lightInput.value.trim() === ""
-    ) {
-        return "Ошибка: заполните все поля.";
-    }
-
-    if (
-        !Number.isFinite(data.temp) ||
-        !Number.isFinite(data.humidity) ||
-        !Number.isFinite(data.light)
-    ) {
-        return "Ошибка: введите корректные числа.";
-    }
-
-    if (data.temp < -20 || data.temp > 60) {
-        return "Температура должна быть от -20 до 60 °C.";
-    }
-
-    if (data.humidity < 0 || data.humidity > 100) {
-        return "Влажность должна быть от 0 до 100%.";
-    }
-
-    if (data.light < 0 || data.light > 100000) {
-        return "Освещённость должна быть от 0 до 100000 лк.";
-    }
-
-    return "";
-}
-
-function showAlerts(problems) {
-    alertsList.replaceChildren();
-
-    if (problems.length === 0) {
-        const item = document.createElement("li");
-        item.textContent = "Все показатели в норме.";
-        item.className = "good";
-        alertsList.appendChild(item);
-        return;
-    }
-
-    problems.forEach(problem => {
-        const item = document.createElement("li");
-        item.textContent = "Предупреждение: " + problem;
-        item.className = "danger";
-        alertsList.appendChild(item);
-    });
-}
-
-function renderHistory() {
-    historyBody.replaceChildren();
-
-    if (historyData.length === 0) {
-        const row = document.createElement("tr");
-        const cell = document.createElement("td");
-
-        cell.colSpan = 5;
-        cell.textContent = "Пока нет измерений";
-        row.appendChild(cell);
-        historyBody.appendChild(row);
-        return;
-    }
-
-    historyData.forEach(record => {
-        const row = document.createElement("tr");
-
-        const values = [
-            record.time,
-            record.temp + " °C",
-            record.humidity + " %",
-            record.light + " лк",
-            record.status
-        ];
-
-        values.forEach((value, index) => {
-            const cell = document.createElement("td");
-            cell.textContent = value;
-
-            if (index === 4) {
-                cell.className =
-                    record.status === "Норма" ? "good" : "danger";
-            }
-
-            row.appendChild(cell);
-        });
-
-        historyBody.appendChild(row);
-    });
-}
-
-function displayData(data) {
-    document.getElementById("temperature").textContent =
-        data.temp + " °C";
-
-    document.getElementById("humidity").textContent =
-        data.humidity + " %";
-
-    document.getElementById("light").textContent =
-        data.light + " лк";
-
-    const problems = getProblems(data);
-    const status = document.getElementById("status");
-
-    if (problems.length === 0) {
-        status.textContent = "Все показатели в норме";
-        status.className = "good";
+    if (messages.length === 0) {
+        alerts.className = "alert good";
+        alerts.textContent =
+            "Все показатели находятся в пределах нормы.";
     } else {
-        status.textContent = "Обнаружены отклонения";
-        status.className = "danger";
+        alerts.className = "alert warning";
+        alerts.textContent = "ВНИМАНИЕ: " + messages.join(" ");
     }
-
-    showAlerts(problems);
-
-    historyData.unshift({
-        time: new Date().toLocaleTimeString("ru-RU"),
-        temp: data.temp,
-        humidity: data.humidity,
-        light: data.light,
-        status: problems.length > 0 ? "Отклонение" : "Норма"
-    });
-
-    historyData = historyData.slice(0, 50);
-    renderHistory();
 }
 
-function applyData(data) {
-    const error = validateData(data);
+function saveMeasurement(t, h, l) {
+    temperature.textContent = t.toFixed(1) + " °C";
+    humidity.textContent = h + " %";
+    light.textContent = l + " лк";
 
-    if (error) {
-        message.textContent = error;
-        return;
+    checkValues(t, h, l);
+
+    const row = history.insertRow(0);
+    const time = new Date().toLocaleTimeString("ru-RU");
+
+    row.insertCell(0).textContent = time;
+    row.insertCell(1).textContent = t.toFixed(1) + " °C";
+    row.insertCell(2).textContent = h + " %";
+    row.insertCell(3).textContent = l + " лк";
+
+    while (history.rows.length > 20) {
+        history.deleteRow(history.rows.length - 1);
     }
 
-    displayData(data);
-    message.textContent = "Измерение успешно добавлено.";
+    tempInput.value = t;
+    humidityInput.value = h;
+    lightInput.value = l;
 }
 
-form.addEventListener("submit", function(event) {
-    event.preventDefault();
+document.getElementById("sensorForm").addEventListener(
+    "submit",
+    function(event) {
+        event.preventDefault();
 
-    const data = {
-        temp: Number(tempInput.value),
-        humidity: Number(humidityInput.value),
-        light: Number(lightInput.value)
-    };
+        const t = Number(tempInput.value);
+        const h = Number(humidityInput.value);
+        const l = Number(lightInput.value);
 
-    applyData(data);
-});
+        if (
+            tempInput.value.trim() === "" ||
+            humidityInput.value.trim() === "" ||
+            lightInput.value.trim() === "" ||
+            !Number.isFinite(t) ||
+            !Number.isFinite(h) ||
+            !Number.isFinite(l) ||
+            t < -50 || t > 80 ||
+            h < 0 || h > 100 ||
+            l < 0 || l > 10000
+        ) {
+            alert("Проверьте введённые значения!");
+            return;
+        }
 
-function simulateMeasurement() {
-    const data = {
-        temp: Number((16 + Math.random() * 16).toFixed(1)),
-        humidity: Number((20 + Math.random() * 65).toFixed(1)),
-        light: Math.round(Math.random() * 1000)
-    };
+        saveMeasurement(t, h, l);
+    }
+);
 
-    tempInput.value = data.temp;
-    humidityInput.value = data.humidity;
-    lightInput.value = data.light;
+function simulateSensors() {
+    const t = Number((18 + Math.random() * 14).toFixed(1));
+    const h = Math.floor(25 + Math.random() * 51);
+    const l = Math.floor(200 + Math.random() * 701);
 
-    applyData(data);
+    saveMeasurement(t, h, l);
 }
 
 document.getElementById("simulateBtn").addEventListener(
     "click",
-    simulateMeasurement
+    function() {
+        simulateSensors();
+    }
 );
 
-document.getElementById("autoBtn").addEventListener("click", function() {
-    if (autoTimer !== null) {
-        message.textContent = "Автоизмерение уже запущено.";
-        return;
+document.getElementById("autoBtn").addEventListener(
+    "click",
+    function() {
+        if (timer !== null) {
+            return;
+        }
+
+        status.textContent = "● Автомониторинг включён";
+        timer = setInterval(simulateSensors, 3000);
+        simulateSensors();
     }
+);
 
-    simulateMeasurement();
-    autoTimer = setInterval(simulateMeasurement, 3000);
-    message.textContent = "Автоизмерение запущено.";
-});
+document.getElementById("stopBtn").addEventListener(
+    "click",
+    function() {
+        if (timer !== null) {
+            clearInterval(timer);
+            timer = null;
+        }
 
-document.getElementById("stopBtn").addEventListener("click", function() {
-    if (autoTimer !== null) {
-        clearInterval(autoTimer);
-        autoTimer = null;
-        message.textContent = "Автоизмерение остановлено.";
-    } else {
-        message.textContent = "Автоизмерение не запущено.";
+        status.textContent = "● Автомониторинг остановлен";
     }
-});
+);
 
-document.getElementById("resetBtn").addEventListener("click", function() {
-    historyData = [];
-    renderHistory();
-    message.textContent = "История измерений очищена.";
-});
+document.getElementById("resetBtn").addEventListener(
+    "click",
+    function() {
+        if (timer !== null) {
+            clearInterval(timer);
+            timer = null;
+        }
 
-updateClock();
-setInterval(updateClock, 1000);
-renderHistory();
+        history.innerHTML = "";
+        saveMeasurement(23.5, 45, 520);
+        history.innerHTML = "";
+
+        status.textContent = "● История сброшена";
+    }
+);
+
+saveMeasurement(23.5, 45, 520);
