@@ -1,0 +1,89 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Мои заметки</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header>
+    <h1>Мои заметки</h1>
+    <p>Черновик, дневник и управление заявками</p>
+  </header>
+
+  <nav class="tabs">
+    <button data-tab="draft">Черновик</button>
+    <button data-tab="diary">Мини-дневник</button>
+    <button data-tab="wizard">Заявка</button>
+  </nav>
+
+  <main>
+    <section id="draft" class="panel">
+      <h2>Черновик сообщения</h2>
+      <p>Текст автоматически сохраняется в браузере.</p>
+
+      <textarea id="draftText" rows="7"
+        placeholder="Введите текст сообщения..."></textarea>
+
+      <p id="draftStatus" class="status" aria-live="polite"></p>
+      <button id="clearDraft" class="danger">Очистить черновик</button>
+    </section>
+
+    <section id="diary" class="panel" hidden>
+      <h2>Мой мини-дневник</h2>
+
+      <label for="diaryDate">Дата записи</label>
+      <input type="date" id="diaryDate">
+
+      <label for="diaryText">Текст записи</label>
+      <textarea id="diaryText" rows="4"
+        placeholder="Что произошло сегодня?"></textarea>
+
+      <button id="addEntry">Добавить запись</button>
+      <p id="diaryStatus" class="status" aria-live="polite"></p>
+
+      <h3>Сохранённые записи</h3>
+      <div id="entries"></div>
+    </section>
+
+    <section id="wizard" class="panel" hidden>
+      <h2>Мастер заполнения заявки</h2>
+      <p>Шаг <span id="stepNumber">1</span> из 3</p>
+
+      <div id="step1" class="wizard-step">
+        <label for="appName">ФИО</label>
+        <input id="appName" placeholder="Введите ФИО">
+      </div>
+
+      <div id="step2" class="wizard-step" hidden>
+        <label for="appGroup">Учебная группа</label>
+        <input id="appGroup" placeholder="Например, ИС-23">
+      </div>
+
+      <div id="step3" class="wizard-step" hidden>
+        <label for="appPurpose">Цель заявки</label>
+        <textarea id="appPurpose" rows="4"
+          placeholder="Опишите цель заявки"></textarea>
+      </div>
+
+      <p id="wizardStatus" class="status" aria-live="polite"></p>
+
+      <div class="actions">
+        <button id="prevStep" class="secondary">Назад</button>
+        <button id="nextStep">Далее</button>
+        <button id="submitApp" hidden>Отправить заявку</button>
+      </div>
+
+      <h3>Отправленные заявки</h3>
+      <div id="applications"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Моё веб-приложение</p>
+  </footer>
+</body>
+</html>
