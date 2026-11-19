@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Электронная библиотека</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <h1>Электронная библиотека</h1>
+    <p>Каталог учебной литературы</p>
+</header>
+
+<main>
+    <section class="card">
+        <h2>Каталог книг</h2>
+        <div id="booksList"></div>
+    </section>
+
+    <section class="card">
+        <h2>Вход администратора</h2>
+
+        <form id="loginForm">
+            <input id="login" placeholder="Логин" required>
+            <input id="password" type="password"
+                   placeholder="Пароль" required>
+            <button>Войти</button>
+        </form>
+
+        <button id="logoutButton" hidden>Выйти</button>
+        <p id="message"></p>
+    </section>
+
+    <section class="card">
+        <h2>Добавить книгу</h2>
+
+        <form id="bookForm">
+            <input id="title" placeholder="Название книги" required>
+            <input id="author" placeholder="Автор" required>
+            <button>Добавить</button>
+        </form>
+
+        <p id="bookMessage"></p>
+    </section>
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
