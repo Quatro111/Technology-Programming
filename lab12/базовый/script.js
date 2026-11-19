@@ -1,67 +1,47 @@
 const form = document.getElementById('loginForm');
 
-form.addEventListener('submit', async (e) => {
-    e.preventDefault();
+const DEMO_USER = {
+    login: 'student',
+    password: '12345',
+    name: 'Иван Иванов'
+};
 
-    const login = document.getElementById('login').value;
+form.addEventListener('submit', (event) => {
+    event.prevent.preventDefault();
+
+    const login = document.getElementById('login').value.trim();
     const password = document.getElementById('password').value;
 
-    try {
-        const response = await fetch('/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ login, password })
-        });
-
-        const data = await response.json();
-
-        document.getElementById('message').textContent =
-            data.message;
-
-        if (response.ok) {
-            showProfile(data.name);
-        }
-    } catch {
-        document.getElementById('message').textContent =
-            'Ошибка соединения с сервером';
+    if (!login || !password) {
+        document.getElementById('message').textContent = 'Заполните все поля';
+        return;
     }
+
+    if (login !== DEMO_USER.login || password !== DEMO_USER.password) {
+        document.getElementById('message').textContent = 'Неверный логин или пароль';
+        return;
+    }
+
+    sessionStorage.setItem('studentName', DEMO_USER.name);
+    showProfile(DEMO_USER.name);
+    document.getElementById('message').textContent = 'Вход выполнен успешно';
 });
 
 function showProfile(name) {
     document.getElementById('loginSection').hidden = true;
     document.getElementById('profileSection').hidden = false;
-    document.getElementById('studentName').textContent =
-        'Студент: ' + name;
+    document.getElementById('studentName').textContent = 'Студент: ' + name;
 }
 
-document.getElementById('logoutButton')
-    .addEventListener('click', async () => {
-        const response = await fetch('/logout', {
-            method: 'POST'
-        });
+document.getElementById('logoutButton').addEventListener('click', () => {
+    sessionStorage.removeItem('studentName');
+    document.getElementById('profileSection').hidden = true;
+    document.getElementById('loginSection').hidden = false;
+    document.getElementById('message').textContent = 'Вы вышли из системы';
+    form.reset();
+});
 
-        const data = await response.json();
-
-        if (response.ok) {
-            document.getElementById('profileSection').hidden = true;
-            document.getElementById('loginSection').hidden = false;
-            document.getElementById('message').textContent =
-                data.message;
-            form.reset();
-        }
-    });
-
-async function checkSession() {
-    try {
-        const response = await fetch('/profile');
-
-        if (response.ok) {
-            const data = await response.json();
-            showProfile(data.name);
-        }
-    } catch {
-        console.log('Сессия не найдена');
-    }
+const savedName = sessionStorage.getItem('studentName');
+if (savedName) {
+    showProfile(savedName);
 }
-
-checkSession();
